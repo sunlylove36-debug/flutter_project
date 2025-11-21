@@ -34,9 +34,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.primaryGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -47,7 +45,7 @@ class HomePage extends StatelessWidget {
                   // Header
                   _buildHeader(),
                   const SizedBox(height: 20),
-                  
+
                   // Greeting
                   Text(
                     'Good morning!',
@@ -56,23 +54,23 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Promotional Banner
                   _buildPromoBanner(),
                   const SizedBox(height: 30),
-                  
+
                   // Service Grid
                   _buildServiceGrid(),
                   const SizedBox(height: 30),
-                  
+
                   // Competition Section
                   _buildCompetitionSection(),
                   const SizedBox(height: 30),
-                  
+
                   // Associations Section
                   _buildAssociationsSection(),
                   const SizedBox(height: 30),
-                  
+
                   // Referrals Section
                   _buildReferralsSection(),
                 ],
@@ -88,11 +86,7 @@ class HomePage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Icon(
-          Icons.menu,
-          color: AppColors.textLight,
-          size: 24,
-        ),
+        const Icon(Icons.menu, color: AppColors.textLight, size: 24),
         Row(
           children: [
             Container(
@@ -114,7 +108,7 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'ភ្យូវីលីង',
+              'LUYLEUN',
               style: AppFonts.khmerAppTitle.copyWith(
                 color: AppColors.textLight,
               ),
@@ -210,12 +204,39 @@ class HomePage extends StatelessWidget {
 
   Widget _buildServiceGrid() {
     final services = [
-      {'icon': Icons.account_balance_wallet, 'title': 'Account'},
-      {'icon': Icons.monetization_on, 'title': 'Request Loan'},
-      {'icon': Icons.credit_card, 'title': 'Repayment'},
-      {'icon': Icons.calculate, 'title': 'Loan\nCalculator'},
-      {'icon': Icons.people, 'title': 'Referral'},
-      {'icon': Icons.apps, 'title': 'Service'},
+      {
+        'icon': 'assets/images/account.png', // Add your custom account icon
+        'title': 'Account',
+        'fallbackIcon':
+            Icons.account_balance_wallet, // Fallback if image not found
+      },
+      {
+        'icon': 'assets/images/loan.png', // Add your custom loan icon
+        'title': 'Request Loan',
+        'fallbackIcon': Icons.monetization_on,
+      },
+      {
+        'icon':
+            'assets/images/repayment.png', // Add your custom repayment icon
+        'title': 'Repayment',
+        'fallbackIcon': Icons.credit_card,
+      },
+      {
+        'icon':
+            'assets/images/calculator.png', // Add your custom calculator icon
+        'title': 'Loan\nCalculator',
+        'fallbackIcon': Icons.calculate,
+      },
+      {
+        'icon': 'assets/images/inviteFri.png', // Add your custom referral icon
+        'title': 'Referral',
+        'fallbackIcon': Icons.people,
+      },
+      {
+        'icon': 'assets/images/service.png', // Add your custom service icon
+        'title': 'Service',
+        'fallbackIcon': Icons.apps,
+      },
     ];
 
     return GridView.builder(
@@ -236,9 +257,7 @@ class HomePage extends StatelessWidget {
               case 'Account':
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const AccountPage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const AccountPage()),
                 );
                 break;
               case 'Request Loan':
@@ -268,17 +287,13 @@ class HomePage extends StatelessWidget {
               case 'Referral':
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const ReferralPage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const ReferralPage()),
                 );
                 break;
               case 'Service':
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const ServicePage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const ServicePage()),
                 );
                 break;
             }
@@ -298,10 +313,9 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  service['icon'] as IconData,
-                  color: AppColors.primaryBlue,
-                  size: 30,
+                _buildServiceIcon(
+                  service['icon'] as String,
+                  service['fallbackIcon'] as IconData,
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -319,15 +333,28 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // Helper method to build service icons with fallback
+  Widget _buildServiceIcon(String imagePath, IconData fallbackIcon) {
+    return SizedBox(
+      width: 40,
+      height: 36,
+      child: Image.asset(
+        imagePath,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) {
+          return Icon(fallbackIcon, color: AppColors.primaryBlue, size: 30);
+        },
+      ),
+    );
+  }
+
   Widget _buildCompetitionSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Competition program',
-          style: AppFonts.sectionTitle.copyWith(
-            color: AppColors.textLight,
-          ),
+          style: AppFonts.sectionTitle.copyWith(color: AppColors.textLight),
         ),
         const SizedBox(height: 15),
         Row(
@@ -367,19 +394,13 @@ class HomePage extends StatelessWidget {
               color: AppColors.overlayLight,
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              color: AppColors.textLight,
-              size: 25,
-            ),
+            child: Icon(icon, color: AppColors.textLight, size: 25),
           ),
           const SizedBox(height: 10),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: AppFonts.cardTitle.copyWith(
-              color: AppColors.textLight,
-            ),
+            style: AppFonts.cardTitle.copyWith(color: AppColors.textLight),
           ),
         ],
       ),
@@ -392,9 +413,7 @@ class HomePage extends StatelessWidget {
       children: [
         Text(
           'Associations',
-          style: AppFonts.sectionTitle.copyWith(
-            color: AppColors.textLight,
-          ),
+          style: AppFonts.sectionTitle.copyWith(color: AppColors.textLight),
         ),
         const SizedBox(height: 15),
         Row(
@@ -430,9 +449,7 @@ class HomePage extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: AppFonts.associationLabel.copyWith(
-            color: AppColors.textLight,
-          ),
+          style: AppFonts.associationLabel.copyWith(color: AppColors.textLight),
         ),
       ],
     );
@@ -444,9 +461,7 @@ class HomePage extends StatelessWidget {
       children: [
         Text(
           'Referrals',
-          style: AppFonts.sectionTitle.copyWith(
-            color: AppColors.textLight,
-          ),
+          style: AppFonts.sectionTitle.copyWith(color: AppColors.textLight),
         ),
         const SizedBox(height: 15),
         Row(
@@ -468,7 +483,7 @@ class HomePage extends StatelessWidget {
       const Color(0xFF696969),
     ];
     final colorIndex = initial.codeUnitAt(0) % colors.length;
-    
+
     return Column(
       children: [
         Container(
