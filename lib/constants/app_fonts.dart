@@ -350,6 +350,49 @@ class AppFonts {
     fontFamily: secondaryFont,
     letterSpacing: 0.4,
   );
+  
+  // Additional styles for forms and pages
+  static const TextStyle pageTitle = TextStyle(
+    fontSize: fontSize28,
+    fontWeight: bold,
+    fontFamily: displayFont,
+    letterSpacing: 0.15,
+  );
+  
+  static const TextStyle bodyText = TextStyle(
+    fontSize: fontSize16,
+    fontWeight: regular,
+    fontFamily: primaryFont,
+    letterSpacing: 0.25,
+  );
+  
+  static const TextStyle buttonText = TextStyle(
+    fontSize: fontSize16,
+    fontWeight: semiBold,
+    fontFamily: secondaryFont,
+    letterSpacing: 0.5,
+  );
+  
+  static const TextStyle appBarTitle = TextStyle(
+    fontSize: fontSize20,
+    fontWeight: semiBold,
+    fontFamily: displayFont,
+    letterSpacing: 0.15,
+  );
+  
+  static const TextStyle fieldLabel = TextStyle(
+    fontSize: fontSize14,
+    fontWeight: medium,
+    fontFamily: secondaryFont,
+    letterSpacing: 0.25,
+  );
+  
+  static const TextStyle dialogTitle = TextStyle(
+    fontSize: fontSize20,
+    fontWeight: semiBold,
+    fontFamily: displayFont,
+    letterSpacing: 0.15,
+  );
 }
 
 // Text Theme for MaterialApp

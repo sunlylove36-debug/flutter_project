@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_fonts.dart';
 import 'constants/app_theme.dart';
+import 'pages/account_page.dart';
+import 'pages/request_loan_page.dart';
+import 'pages/repayment_page.dart';
+import 'pages/loan_calculator_page.dart';
+import 'pages/referral_page.dart';
+import 'pages/service_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -84,7 +90,7 @@ class HomePage extends StatelessWidget {
       children: [
         const Icon(
           Icons.menu,
-          color: Colors.white,
+          color: AppColors.textLight,
           size: 24,
         ),
         Row(
@@ -93,7 +99,7 @@ class HomePage extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: AppColors.cardBackground,
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -125,7 +131,7 @@ class HomePage extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.notifications_outlined,
-                color: Colors.white,
+                color: AppColors.textLight,
                 size: 20,
               ),
             ),
@@ -138,7 +144,7 @@ class HomePage extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.phone,
-                color: Colors.white,
+                color: AppColors.textLight,
                 size: 20,
               ),
             ),
@@ -152,11 +158,11 @@ class HomePage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF0B42C7),
+        color: AppColors.primaryDarkBlue,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.shadowLight,
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -188,12 +194,12 @@ class HomePage extends StatelessWidget {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: AppColors.overlayLight,
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(
               Icons.person,
-              color: Colors.white,
+              color: AppColors.textLight,
               size: 40,
             ),
           ),
@@ -224,35 +230,89 @@ class HomePage extends StatelessWidget {
       itemCount: services.length,
       itemBuilder: (context, index) {
         final service = services[index];
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 5,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                service['icon'] as IconData,
-                color: AppColors.primaryBlue,
-                size: 30,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                service['title'] as String,
-                textAlign: TextAlign.center,
-                style: AppFonts.serviceLabel.copyWith(
-                  color: AppColors.textPrimary,
+        return GestureDetector(
+          onTap: () {
+            switch (service['title']) {
+              case 'Account':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AccountPage(),
+                  ),
+                );
+                break;
+              case 'Request Loan':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RequestLoanPage(),
+                  ),
+                );
+                break;
+              case 'Repayment':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RepaymentPage(),
+                  ),
+                );
+                break;
+              case 'Loan\nCalculator':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoanCalculatorPage(),
+                  ),
+                );
+                break;
+              case 'Referral':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReferralPage(),
+                  ),
+                );
+                break;
+              case 'Service':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ServicePage(),
+                  ),
+                );
+                break;
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.cardBackground,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.shadowLight,
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
                 ),
-              ),
-            ],
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  service['icon'] as IconData,
+                  color: AppColors.primaryBlue,
+                  size: 30,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  service['title'] as String,
+                  textAlign: TextAlign.center,
+                  style: AppFonts.serviceLabel.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -295,7 +355,7 @@ class HomePage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: const Color(0xFF0B42C7),
+        color: AppColors.primaryDarkBlue,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -304,12 +364,12 @@ class HomePage extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: AppColors.overlayLight,
               shape: BoxShape.circle,
             ),
             child: Icon(
               icon,
-              color: Colors.white,
+              color: AppColors.textLight,
               size: 25,
             ),
           ),
@@ -317,10 +377,8 @@ class HomePage extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
+            style: AppFonts.cardTitle.copyWith(
+              color: AppColors.textLight,
             ),
           ),
         ],
@@ -332,12 +390,10 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Associations',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+          style: AppFonts.sectionTitle.copyWith(
+            color: AppColors.textLight,
           ),
         ),
         const SizedBox(height: 15),
@@ -361,12 +417,12 @@ class HomePage extends StatelessWidget {
           width: 60,
           height: 60,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: AppColors.overlayLight,
             shape: BoxShape.circle,
           ),
           child: const Icon(
             Icons.business,
-            color: Colors.white,
+            color: AppColors.textLight,
             size: 30,
           ),
         ),
@@ -374,10 +430,8 @@ class HomePage extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
+          style: AppFonts.associationLabel.copyWith(
+            color: AppColors.textLight,
           ),
         ),
       ],
@@ -388,12 +442,10 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Referrals',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+          style: AppFonts.sectionTitle.copyWith(
+            color: AppColors.textLight,
           ),
         ),
         const SizedBox(height: 15),

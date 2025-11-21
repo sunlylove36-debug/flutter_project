@@ -84,4 +84,8 @@ class AppColors {
   static Color overlayLight = Colors.white.withOpacity(0.2);
   static Color overlayMedium = Colors.white.withOpacity(0.3);
   static Color overlayDark = Colors.black.withOpacity(0.5);
+  
+  // Form Colors
+  static const Color borderLight = grey300;
+  static const Color error = accentRed;
 }
