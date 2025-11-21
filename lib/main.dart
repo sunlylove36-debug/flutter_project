@@ -57,6 +57,10 @@ class HomePage extends StatelessWidget {
 
                   // Promotional Banner
                   _buildPromoBanner(),
+                  const SizedBox(height: 20),
+
+                  // Slide Banner
+                  _buildSlideBanner(),
                   const SizedBox(height: 30),
 
                   // Service Grid
@@ -67,9 +71,7 @@ class HomePage extends StatelessWidget {
                   _buildCompetitionSection(),
                   const SizedBox(height: 30),
 
-                  // Associations Section
-                  _buildAssociationsSection(),
-                  const SizedBox(height: 30),
+                
 
                   // Referrals Section
                   _buildReferralsSection(),
@@ -348,6 +350,128 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  Widget _buildSlideBanner() {
+    return Container(
+      height: 150,
+      child: PageView.builder(
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          final banners = [
+            {
+              'title': 'Special Loan Offer',
+              'subtitle': 'Get up to \$5000 with low interest',
+              'color': AppColors.primaryBlue,
+              'icon': Icons.monetization_on,
+            },
+            {
+              'title': 'Quick Approval',
+              'subtitle': 'Instant approval in 24 hours',
+              'color': AppColors.primaryDarkBlue,
+              'icon': Icons.flash_on,
+            },
+            {
+              'title': 'Mobile Banking',
+              'subtitle': 'Manage your loans on the go',
+              'color': const Color(0xFF4A90E2),
+              'icon': Icons.mobile_friendly,
+            },
+          ];
+          
+          final banner = banners[index];
+          
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  banner['color'] as Color,
+                  (banner['color'] as Color).withOpacity(0.8),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        banner['title'] as String,
+                        style: AppFonts.cardTitle.copyWith(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        banner['subtitle'] as String,
+                        style: AppFonts.serviceLabel.copyWith(
+                          color: Colors.white.withOpacity(0.9),
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Handle button press
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: banner['color'] as Color,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: const Text(
+                          'Learn More',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    banner['icon'] as IconData,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildCompetitionSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,53 +531,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAssociationsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Associations',
-          style: AppFonts.sectionTitle.copyWith(color: AppColors.textLight),
-        ),
-        const SizedBox(height: 15),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildAssociationItem('Khmer\nEnterprise'),
-            _buildAssociationItem('YEAC'),
-            _buildAssociationItem('FASMEC'),
-            _buildAssociationItem('CDTA'),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAssociationItem(String title) {
-    return Column(
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: AppColors.overlayLight,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            Icons.business,
-            color: AppColors.textLight,
-            size: 30,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: AppFonts.associationLabel.copyWith(color: AppColors.textLight),
-        ),
-      ],
-    );
-  }
+  
 
   Widget _buildReferralsSection() {
     return Column(
