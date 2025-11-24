@@ -11,6 +11,7 @@ import 'pages/repayment_page.dart';
 import 'pages/loan_calculator_page.dart';
 import 'pages/referral_page.dart';
 import 'pages/service_page.dart';
+import 'pages/profile_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -131,10 +132,18 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Menu icon
-          const Icon(
-            Icons.menu,
-            color: Colors.white,
-            size: 24,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+              );
+            },
+            child: const Icon(
+              Icons.menu,
+              color: Colors.white,
+              size: 24,
+            ),
           ),
           
           // Full Logo (no additional text needed)
