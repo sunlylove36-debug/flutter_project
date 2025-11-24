@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'occupation_form_page.dart';
 
 class ProfileIdentityFormPage extends StatefulWidget {
-  const ProfileIdentityFormPage({super.key});
+  final VoidCallback? onFormCompleted;
+  
+  const ProfileIdentityFormPage({super.key, this.onFormCompleted});
 
   @override
   State<ProfileIdentityFormPage> createState() => _ProfileIdentityFormPageState();
@@ -857,7 +860,17 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profile form submitted successfully!')),
       );
-      Navigator.pop(context);
+      widget.onFormCompleted?.call();
+      
+      // Navigate to next step (Occupation Form) - Step 2
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OccupationFormPage(
+            onFormCompleted: widget.onFormCompleted,
+          ),
+        ),
+      );
     }
   }
 }

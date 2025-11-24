@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_fonts.dart';
 import 'constants/app_theme.dart';
+import 'services/form_service.dart';
 import 'pages/account_page.dart';
 import 'pages/request_loan_page.dart';
 import 'pages/repayment_page.dart';
@@ -18,11 +20,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fintech App',
-      theme: AppTheme.lightTheme,
-      home: const HomePage(),
-      debugShowCheckedModeBanner: false,
+    return ChangeNotifierProvider(
+      create: (context) => FormService(),
+      child: MaterialApp(
+        title: 'Fintech App',
+        theme: AppTheme.lightTheme,
+        home: const HomePage(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
@@ -55,21 +60,17 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Promotional Banner
-                  _buildPromoBanner(),
-                  const SizedBox(height: 20),
 
-                  // Slide Banner
-                  _buildSlideBanner(),
-                  const SizedBox(height: 30),
+                  
 
                   // Service Grid
                   _buildServiceGrid(),
                   const SizedBox(height: 30),
 
-                  // Competition Section
-                  _buildCompetitionSection(),
+                  // Slide Banner
+                  _buildSlideBanner(),
                   const SizedBox(height: 30),
+
 
                 
 
@@ -150,59 +151,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildPromoBanner() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.primaryDarkBlue,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadowLight,
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'ទទួលបានកម្ចីវិទ្យុក់',
-                  style: AppFonts.khmerPromoTitle.copyWith(
-                    color: AppColors.textLight,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  'ហូតពី ២០០០ដុល្លារ',
-                  style: AppFonts.khmerPromoSubtitle.copyWith(
-                    color: AppColors.textLight,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: AppColors.overlayLight,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(
-              Icons.person,
-              color: AppColors.textLight,
-              size: 40,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+ 
 
   Widget _buildServiceGrid() {
     final services = [
@@ -468,65 +417,6 @@ class HomePage extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildCompetitionSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Competition program',
-          style: AppFonts.sectionTitle.copyWith(color: AppColors.textLight),
-        ),
-        const SizedBox(height: 15),
-        Row(
-          children: [
-            Expanded(
-              child: _buildCompetitionCard(
-                'Techo Startup Center',
-                Icons.business_center,
-              ),
-            ),
-            const SizedBox(width: 15),
-            Expanded(
-              child: _buildCompetitionCard(
-                'Cambodian Young\nEntrepreneur Awards',
-                Icons.emoji_events,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCompetitionCard(String title, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: AppColors.primaryDarkBlue,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: AppColors.overlayLight,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: AppColors.textLight, size: 25),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: AppFonts.cardTitle.copyWith(color: AppColors.textLight),
-          ),
-        ],
       ),
     );
   }

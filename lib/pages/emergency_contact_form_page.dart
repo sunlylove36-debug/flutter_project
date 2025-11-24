@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'credit_information_form_page.dart';
 
 class EmergencyContactFormPage extends StatefulWidget {
-  const EmergencyContactFormPage({super.key});
+  final VoidCallback? onFormCompleted;
+  
+  const EmergencyContactFormPage({super.key, this.onFormCompleted});
 
   @override
   State<EmergencyContactFormPage> createState() => _EmergencyContactFormPageState();
@@ -426,7 +429,17 @@ class _EmergencyContactFormPageState extends State<EmergencyContactFormPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Emergency contact information submitted successfully!')),
       );
-      Navigator.pop(context);
+      widget.onFormCompleted?.call();
+      
+      // Navigate to next step (Credit Information Form) - Step 4
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreditInformationFormPage(
+            onFormCompleted: widget.onFormCompleted,
+          ),
+        ),
+      );
     }
   }
 }

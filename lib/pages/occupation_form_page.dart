@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'emergency_contact_form_page.dart';
 
 class OccupationFormPage extends StatefulWidget {
-  const OccupationFormPage({super.key});
+  final VoidCallback? onFormCompleted;
+  
+  const OccupationFormPage({super.key, this.onFormCompleted});
 
   @override
   State<OccupationFormPage> createState() => _OccupationFormPageState();
@@ -737,7 +740,17 @@ class _OccupationFormPageState extends State<OccupationFormPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Occupation form submitted successfully!')),
       );
-      Navigator.pop(context);
+      widget.onFormCompleted?.call();
+      
+      // Navigate to next step (Emergency Contact Form) - Step 3
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EmergencyContactFormPage(
+            onFormCompleted: widget.onFormCompleted,
+          ),
+        ),
+      );
     }
   }
 }
