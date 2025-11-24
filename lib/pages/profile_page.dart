@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_fonts.dart';
+import 'profile_detail_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -50,7 +51,7 @@ class ProfilePage extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Row(
           children: [
             GestureDetector(
@@ -101,7 +102,7 @@ class ProfilePage extends StatelessWidget {
       offset: const Offset(0, -30), // Move up to overlap with blue section
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(40),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -269,17 +270,25 @@ class ProfilePage extends StatelessWidget {
             hasArrow: item['hasArrow'] as bool,
             subtitle: item['subtitle'] as String?,
             color: item['color'] as Color,
-            onTap: () {
-              // Handle menu item tap
-              print('Tapped: ${item['title']}');
-            },
+              onTap: () {
+                if (item['title'] == 'My profile') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfileDetailPage(),
+                    ),
+                  );
+                } else {
+                  print('Tapped: ${item['title']}');
+                }
+              },
           )),
           
           const Spacer(),
           
           // App version
           Padding(
-            padding: const EdgeInsets.only(bottom: 30),
+            padding: const EdgeInsets.only(bottom: 20),
             child: Text(
               'App version: V 3.2.9',
               style: TextStyle(

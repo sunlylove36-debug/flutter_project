@@ -5,6 +5,7 @@ import 'occupation_form_page.dart';
 import 'profile_identity_form_page.dart';
 import 'emergency_contact_form_page.dart';
 import 'credit_information_form_page.dart';
+import '../constants/app_colors.dart';
 
 class RequestLoanPage extends StatefulWidget {
   const RequestLoanPage({super.key});
@@ -48,11 +49,7 @@ class _RequestLoanPageState extends State<RequestLoanPage> {
         return Scaffold(
           body: Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFF1953EA), Color(0xFF1953EA)],
-              ),
+                gradient: AppColors.primaryGradient,
             ),
             child: SafeArea(
               child: Column(
@@ -242,7 +239,7 @@ class _RequestLoanPageState extends State<RequestLoanPage> {
           child: ElevatedButton(
             onPressed: () => _showIncompleteFormsDialog(incompleteForms, formService),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
+              backgroundColor: Colors.blue,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -366,7 +363,7 @@ class _RequestLoanPageState extends State<RequestLoanPage> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1953EA),
+                        color: const Color(0xFFFFFFFF),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: const Text(
