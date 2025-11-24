@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_fonts.dart';
 import 'profile_detail_page.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  File? _profileImage;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +34,7 @@ class ProfilePage extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // Header with back button and logo
             _buildHeader(context),
-            
-            // Profile content with curved top
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -31,10 +47,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    // Profile section with credit score
                     _buildProfileSection(),
-                    
-                    // Settings menu
                     Expanded(
                       child: _buildSettingsMenu(context),
                     ),
@@ -99,7 +112,7 @@ class ProfilePage extends StatelessWidget {
 
   Widget _buildProfileSection() {
     return Transform.translate(
-      offset: const Offset(0, -30), // Move up to overlap with blue section
+      offset: const Offset(0, -30),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
         padding: const EdgeInsets.all(40),
@@ -112,55 +125,64 @@ class ProfilePage extends StatelessWidget {
             // Profile picture with camera icon
             Stack(
               children: [
-                Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.green,
-                      width: 3,
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.green,
+                        width: 3,
+                      ),
                     ),
-                  ),
-                  child: ClipOval(
-                    child: Image.asset(
-                      'assets/images/profile_placeholder.jpg',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey[300],
-                          child: const Icon(
-                            Icons.person,
-                            size: 35,
-                            color: Colors.grey,
-                          ),
-                        );
-                      },
+                    child: ClipOval(
+                      child: _profileImage != null
+                          ? Image.file(
+                              _profileImage!,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              'assets/images/profile_placeholder.jpg',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.grey[300],
+                                  child: const Icon(
+                                    Icons.person,
+                                    size: 35,
+                                    color: Colors.grey,
+                                  ),
+                                );
+                              },
+                            ),
                     ),
                   ),
                 ),
                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: const BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.camera_alt,
-                      color: Colors.white,
-                      size: 14,
+                  child: GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      width: 24,
+                      height: 24,
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                        size: 14,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
             const SizedBox(width: 20),
-            
-            // Credit score section
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
