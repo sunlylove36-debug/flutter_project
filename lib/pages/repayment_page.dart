@@ -266,7 +266,7 @@ class _RepaymentPageState extends State<RepaymentPage> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: _selectedLoan,
+          initialValue: _selectedLoan,
           items: _availableLoans.map((String loan) {
             return DropdownMenuItem<String>(
               value: loan,

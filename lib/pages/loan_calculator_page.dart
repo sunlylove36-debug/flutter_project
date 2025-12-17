@@ -147,7 +147,7 @@ class _LoanCalculatorPageState extends State<LoanCalculatorPage> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: _selectedLoanType,
+          initialValue: _selectedLoanType,
           items: _loanTypes.map((loan) {
             return DropdownMenuItem<String>(
               value: loan['name'],

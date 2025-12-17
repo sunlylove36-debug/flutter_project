@@ -12,7 +12,7 @@ import 'pages/loan_calculator_page.dart';
 import 'pages/referral_page.dart';
 import 'pages/service_page.dart';
 import 'pages/profile_page.dart';
-
+import 'dart:ui';
 void main() {
   runApp(const MyApp());
 }
@@ -72,9 +72,10 @@ class _HomePageState extends State<HomePage> {
     _pageController.dispose();
     super.dispose();
   }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryBlue,
+      backgroundColor: AppColors.primaryDarkBlue,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -99,19 +100,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 20),
 
-
-                  
-
                   // Service Grid
                   _buildServiceGrid(),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
 
                   // Slide Banner
                   _buildSlideBanner(),
-                  const SizedBox(height: 30),
-
-
-                
+                  const SizedBox(height: 20),      
 
                   // Referrals Section
                   _buildReferralsSection(),
@@ -122,6 +117,68 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      bottomNavigationBar: Container(
+  margin: const EdgeInsets.all(16),
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(30),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.2),
+        blurRadius: 20,
+        offset: const Offset(0, 10),
+      ),
+    ],
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(30),
+    child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.2),
+            width: 1.5,
+          ),
+        ),
+        child: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble_rounded),
+              label: 'Chat',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance_wallet_rounded),
+              label: 'Loan',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_rounded),
+              label: 'Profile',
+            ),
+          ],
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white.withOpacity(0.5),
+          selectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 12,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 11,
+          ),
+        ),
+      ),
+    ),
+  ),
+),
     );
   }
 
@@ -148,7 +205,7 @@ class _HomePageState extends State<HomePage> {
           
           // Full Logo (no additional text needed)
           Container(
-            height: 50,
+            height: 40,
             constraints: const BoxConstraints(maxWidth: 200),
             child: Image.asset(
               'assets/images/logo.png',
@@ -190,9 +247,9 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(width: 4),
               const Icon(
-                Icons.phone,
+                Icons.chat,
                 color: Colors.white,
-                size: 22,
+                size: 20,
               ),
             ],
           ),
@@ -213,25 +270,25 @@ class _HomePageState extends State<HomePage> {
       },
       {
         'icon': 'assets/images/loan.png', // Add your custom loan icon
-        'title': 'Request Loan',
-        'fallbackIcon': Icons.monetization_on,
+        'title': 'Digital Loan',
+        'fallbackIcon': Icons.attach_money,
       },
       {
         'icon':
-            'assets/images/repayment.png', // Add your custom repayment icon
-        'title': 'Repayment',
-        'fallbackIcon': Icons.credit_card,
+            'assets/images/calculator.png', // Add your custom repayment icon
+        'title': 'Financial Tools',
+        'fallbackIcon': Icons.calculate,
       },
       {
         'icon':
             'assets/images/calculator.png', // Add your custom calculator icon
-        'title': 'Loan\nCalculator',
-        'fallbackIcon': Icons.calculate,
+        'title': 'Education',
+        'fallbackIcon': Icons.school,
       },
       {
         'icon': 'assets/images/inviteFri.png', // Add your custom referral icon
-        'title': 'Referral',
-        'fallbackIcon': Icons.people,
+        'title': 'Job Listing',
+        'fallbackIcon': Icons.work,
       },
       {
         'icon': 'assets/images/service.png', // Add your custom service icon
@@ -341,7 +398,7 @@ class _HomePageState extends State<HomePage> {
                     textAlign: TextAlign.center,
                     style: AppFonts.serviceLabel.copyWith(
                       color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -353,201 +410,115 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Helper method to build service icons with fallback
+  // Helper method to build service icons
   Widget _buildServiceIcon(String imagePath, IconData fallbackIcon) {
-    return SizedBox(
-      width: 40,
-      height: 36,
-      child: Image.asset(
-        imagePath,
-        fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) {
-          return Icon(fallbackIcon, color: AppColors.primaryBlue, size: 30);
-        },
-      ),
-    );
+    // Load image for Account, Digital Loan, and Financial Tools services
+    if (fallbackIcon == Icons.account_balance_wallet || fallbackIcon == Icons.attach_money || fallbackIcon == Icons.trending_up) {
+      // Use calculator.png specifically for Financial Tools
+      String assetPath = imagePath;
+      if (fallbackIcon == Icons.trending_up) {
+        assetPath = 'assets/images/calculator.png';
+      }
+      
+      return SizedBox(
+        width: 30,
+        height: 30,
+        child: Image.asset(
+          assetPath,
+          fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) {
+            // Fallback icons
+            if (fallbackIcon == Icons.account_balance_wallet) {
+              return Icon(Icons.payment, color: AppColors.primaryBlue, size: 30);
+            } else if (fallbackIcon == Icons.attach_money) {
+              return Icon(Icons.attach_money, color: AppColors.primaryBlue, size: 30);
+            } else {
+              return Icon(Icons.calculate, color: AppColors.primaryBlue, size: 30);
+            }
+          },
+        ),
+      );
+    }
+    
+    // Map service titles to custom icon displays for other services
+    final iconMap = {
+      Icons.school: Icons.school,
+      Icons.work: Icons.business_center,
+      Icons.apps: Icons.miscellaneous_services,
+    };
+    
+    final displayIcon = iconMap[fallbackIcon] ?? fallbackIcon;
+    return Icon(displayIcon, color: AppColors.primaryBlue, size: 30);
   }
 
   Widget _buildSlideBanner() {
-    final banners = [
-      {
-        'title': 'Special Loan Offer',
-        'subtitle': 'Get up to \$5000 with low interest',
-        'image': 'assets/images/banner1.png', // You can add custom banner images here
-        'color': AppColors.primaryBlue,
-        'icon': Icons.monetization_on,
-      },
-      {
-        'title': 'Quick Approval',
-        'subtitle': 'Instant approval in 24 hours',
-        'image': 'assets/images/banner2.png', // You can add custom banner images here
-        'color': AppColors.primaryDarkBlue,
-        'icon': Icons.flash_on,
-      },
-      {
-        'title': 'Mobile Banking',
-        'subtitle': 'Manage your loans on the go',
-        'image': 'assets/images/banner3.png', // You can add custom banner images here
-        'color': const Color(0xFF4A90E2),
-        'icon': Icons.mobile_friendly,
-      },
-    ];
+  final banners = [
+    {
+      'image': 'assets/images/banner.jpg',
+      'color': AppColors.primaryBlue,
+    },
+    {
+      'image': 'assets/images/banner1.jpg',
+      'color': AppColors.primaryDarkBlue,
+    },
+    {
+      'image': 'assets/images/banner2.jpg',
+      'color': const Color(0xFF4A90E2),
+    },
+  ];
 
-    return Container(
-      height: 150,
-      child: PageView.builder(
-        controller: _pageController,
-        itemCount: banners.length,
-        onPageChanged: (index) {
-          setState(() {
-            _currentPage = index;
-          });
-        },
-        itemBuilder: (context, index) {
-          final banner = banners[index];
-          
-          return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Stack(
-                children: [
-                  // Background Image (if provided)
-                  if (banner['image'] != null)
-                    Positioned.fill(
-                      child: Image.asset(
-                        banner['image'] as String,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          // Fallback to gradient if image not found
-                          return Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  banner['color'] as Color,
-                                  (banner['color'] as Color).withOpacity(0.8),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
-                  else
-                    // Fallback gradient background
-                    Positioned.fill(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              banner['color'] as Color,
-                              (banner['color'] as Color).withOpacity(0.8),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  
-                  // Content overlay
-                  Positioned.fill(
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.black.withOpacity(0.3),
-                            Colors.black.withOpacity(0.1),
-                          ],
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  banner['title'] as String,
-                                  style: AppFonts.cardTitle.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    shadows: [
-                                      Shadow(
-                                        color: Colors.black.withOpacity(0.5),
-                                        blurRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  banner['subtitle'] as String,
-                                  style: AppFonts.serviceLabel.copyWith(
-                                    color: Colors.white.withOpacity(0.9),
-                                    fontSize: 12,
-                                    shadows: [
-                                      Shadow(
-                                        color: Colors.black.withOpacity(0.5),
-                                        blurRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Flexible(
-                            flex: 1,
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                banner['icon'] as IconData,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+  return SizedBox(
+    height: 150,
+    child: PageView.builder(
+      controller: _pageController,
+      itemCount: banners.length,
+      onPageChanged: (index) {
+        setState(() {
+          _currentPage = index;
+        });
+      },
+      itemBuilder: (context, index) {
+        final banner = banners[index];
+        
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.asset(
+              banner['image'] as String,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback to gradient if image not found
+                return Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        banner['color'] as Color,
+                        (banner['color'] as Color).withOpacity(0.8),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
-    );
-  }
+          ),
+        );
+      },
+    ),
+  );
+}
 
   
 

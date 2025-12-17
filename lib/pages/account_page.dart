@@ -46,7 +46,7 @@ class AccountPage extends StatelessWidget {
                             color: AppColors.textSecondary,
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
                         
                         // Account Balance Card
                         _buildBalanceCard(),
@@ -56,8 +56,6 @@ class AccountPage extends StatelessWidget {
                         _buildAccountDetails(),
                         const SizedBox(height: 20),
                         
-                        // Quick Actions
-                        _buildQuickActions(context),
                       ],
                     ),
                   ),
@@ -190,80 +188,6 @@ class AccountPage extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        )),
-      ],
-    );
-  }
-
-  Widget _buildQuickActions(BuildContext context) {
-    final actions = [
-      {'icon': Icons.edit, 'title': 'Edit Profile', 'color': AppColors.primaryBlue},
-      {'icon': Icons.security, 'title': 'Security Settings', 'color': AppColors.accentGreen},
-      {'icon': Icons.notifications, 'title': 'Notifications', 'color': AppColors.accentOrange},
-      {'icon': Icons.help, 'title': 'Help & Support', 'color': AppColors.textSecondary},
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Quick Actions',
-          style: AppFonts.sectionTitle.copyWith(
-            color: AppColors.textPrimary,
-          ),
-        ),
-        const SizedBox(height: 16),
-        ...actions.map((action) => Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          child: Material(
-            color: AppColors.cardBackground,
-            borderRadius: BorderRadius.circular(12),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(12),
-              onTap: () {
-                // Handle action tap
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${action['title']} clicked'),
-                    backgroundColor: AppColors.primaryBlue,
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: (action['color'] as Color).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        action['icon'] as IconData,
-                        color: action['color'] as Color,
-                        size: 20,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Text(
-                        action['title'] as String,
-                        style: AppFonts.bodyText.copyWith(
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: AppColors.textSecondary,
-                      size: 16,
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ),
         )),
       ],

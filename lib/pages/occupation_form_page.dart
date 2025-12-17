@@ -12,7 +12,7 @@ class OccupationFormPage extends StatefulWidget {
 
 class _OccupationFormPageState extends State<OccupationFormPage> {
   final _formKey = GlobalKey<FormState>();
-  int _currentStep = 1; // Occupation is step 2
+  final int _currentStep = 1; // Occupation is step 2
   String _selectedOccupation = 'Private Company / Organization staff';
   
   // Form controllers
@@ -63,6 +63,26 @@ class _OccupationFormPageState extends State<OccupationFormPage> {
     'Battambang',
     'Kampong Cham',
     'Kandal',
+    'Kampong Speu',
+    'Kampong Thom',
+    'Kratie',
+    'Mondulkiri',
+    'Oddar Meanchey',
+    'Pailin',
+    'Preah Sihanouk',
+    'Preah Vihear',
+    'Pursat',
+    'Ratanakiri',
+    'Sihanoukville',
+    'Stung Treng',
+    'Svay Rieng',
+    'Takeo',
+    'Tboung Khmum',
+    'Banteay Meanchey',
+    'Chumphon',
+    'Kep',
+    'Koh Kong',
+    'Rovieng',
   ];
 
   @override
@@ -610,28 +630,109 @@ class _OccupationFormPageState extends State<OccupationFormPage> {
           ),
         ),
         const SizedBox(height: 8),
-        DropdownButtonFormField<String>(
-          value: value,
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
+        GestureDetector(
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              builder: (BuildContext context) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          label,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF2D3748),
+                          ),
+                        ),
+                      ),
+                      const Divider(height: 1, color: Color(0xFFE2E8F0)),
+                      SizedBox(
+                        height: 300,
+                        child: ListView.builder(
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            final item = items[index];
+                            final isSelected = item == value;
+                            return GestureDetector(
+                              onTap: () {
+                                onChanged(item);
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                color: isSelected ? const Color(0xFFF3F4F6) : Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          item,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: const Color(0xFF2D3748),
+                                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                      if (isSelected)
+                                        const Icon(
+                                          Icons.check,
+                                          color: Color(0xFF1953EA),
+                                          size: 20,
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             );
-          }).toList(),
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(
-              color: Color(0xFFA0AEC0),
-              fontSize: 14,
-            ),
-            filled: true,
-            fillColor: Colors.grey[100],
-            border: OutlineInputBorder(
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: const Color(0xFFCBD5E1),
+                width: 1.5,
+              ),
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF2D3748),
+                    ),
+                  ),
+                ),
+                const Icon(
+                  Icons.arrow_drop_down,
+                  color: Color(0xFF9CA3AF),
+                ),
+              ],
+            ),
           ),
         ),
       ],

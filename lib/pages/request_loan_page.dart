@@ -29,7 +29,7 @@ class _RequestLoanPageState extends State<RequestLoanPage> {
       'id': 'occupation',
     },
     {
-      'title': 'Emergency Contact information',
+      'title': 'Emergency Contact',
       'icon': Icons.contact_phone,
       'color': const Color(0xFF1953EA),
       'id': 'emergency',
