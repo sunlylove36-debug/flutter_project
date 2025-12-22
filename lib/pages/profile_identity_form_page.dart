@@ -21,8 +21,11 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
   final _homeNumberController = TextEditingController();
   final _streetNumberController = TextEditingController();
   
+  // Date fields
   DateTime? _selectedDateline;
   DateTime? _selectedBirthDate;
+  
+  // Dropdown selections
   String _selectedGender = 'Male';
   String _selectedFamilyStatus = 'Single';
   String _selectedEducation = 'Bachelor';
@@ -34,41 +37,30 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
   String _selectedPlaceOfBirth = 'Phnom Penh';
   String _selectedSocialMedia = 'Facebook';
 
-  final List<String> _genderOptions = ['Male', 'Female', 'Other'];
-  final List<String> _familyStatusOptions = ['Single', 'Married', 'Divorced', 'Widowed'];
-  final List<String> _educationOptions = ['High School', 'Bachelor', 'Master', 'PhD'];
-  final List<String> _personalPropertyOptions = ['Own House', 'Rent', 'Family House', 'Other'];
-  final List<String> _provinceOptions = [
-    'Phnom Penh',
-    'Siem Reap',
-    'Battambang',
-    'Kampong Cham',
-    'Kandal',
-    'Kampong Speu',
-    'Kampong Thom',
-    'Kratie',
-    'Mondulkiri',
-    'Oddar Meanchey',
-    'Pailin',
-    'Preah Sihanouk',
-    'Preah Vihear',
-    'Pursat',
-    'Ratanakiri',
-    'Sihanoukville',
-    'Stung Treng',
-    'Svay Rieng',
-    'Takeo',
-    'Tboung Khmum',
-    'Banteay Meanchey',
-    'Chumphon',
-    'Kep',
-    'Koh Kong',
-    'Rovieng',
+  // Dropdown options
+  static const List<String> _genderOptions = ['Male', 'Female', 'Other'];
+  static const List<String> _familyStatusOptions = ['Single', 'Married', 'Divorced', 'Widowed'];
+  static const List<String> _educationOptions = ['High School', 'Bachelor', 'Master', 'PhD'];
+  static const List<String> _personalPropertyOptions = ['Own House', 'Rent', 'Family House', 'Other'];
+  static const List<String> _provinceOptions = [
+    'Phnom Penh', 'Siem Reap', 'Battambang', 'Kampong Cham', 'Kandal',
+    'Kampong Speu', 'Kampong Thom', 'Kratie', 'Mondulkiri', 'Oddar Meanchey',
+    'Pailin', 'Preah Sihanouk', 'Preah Vihear', 'Pursat', 'Ratanakiri',
+    'Sihanoukville', 'Stung Treng', 'Svay Rieng', 'Takeo', 'Tboung Khmum',
+    'Banteay Meanchey', 'Chumphon', 'Kep', 'Koh Kong', 'Rovieng',
   ];
-  final List<String> _ownerOptions = ['Self', 'Family', 'Landlord', 'Other'];
-  final List<String> _stayWithOptions = ['Family', 'Alone', 'Friends', 'Roommate'];
-  final List<String> _durationOptions = ['Less than 1 year', '1-2 years', '3-5 years', '5+ years'];
-  final List<String> _socialMediaOptions = ['Facebook', 'Instagram', 'Twitter', 'LinkedIn', 'TikTok'];
+  static const List<String> _ownerOptions = ['Self', 'Family', 'Landlord', 'Other'];
+  static const List<String> _stayWithOptions = ['Family', 'Alone', 'Friends', 'Roommate'];
+  static const List<String> _durationOptions = ['Less than 1 year', '1-2 years', '3-5 years', '5+ years'];
+  static const List<String> _socialMediaOptions = ['Facebook', 'Instagram', 'Twitter', 'LinkedIn', 'TikTok'];
+
+  // Constants
+  static const _primaryColor = Color(0xFF1953EA);
+  static const _backgroundColor = Color(0xFFF5F5F5);
+  static const _textPrimary = Color(0xFF2D3748);
+  static const _textSecondary = Color(0xFF4A5568);
+  static const _textHint = Color(0xFFA0AEC0);
+  static const _borderColor = Color(0xFFE2E8F0);
 
   @override
   void dispose() {
@@ -89,62 +81,16 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF1953EA), Color(0xFF1953EA)],
+            colors: [_primaryColor, _primaryColor],
           ),
         ),
         child: SafeArea(
           child: Column(
             children: [
-              // Custom App Bar with Progress
-              _buildCustomAppBar(context),
-              // Progress Indicator
+              _buildAppBar(),
               _buildProgressIndicator(),
-              // Form Content
               Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  padding: const EdgeInsets.all(24),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF5F5F5),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Your Profile Section
-                          _buildYourProfileSection(),
-                          const SizedBox(height: 24),
-                          
-                          // Current Address Section
-                          _buildCurrentAddressSection(),
-                          const SizedBox(height: 24),
-                          
-                          // Place of Birth Section
-                          _buildPlaceOfBirthSection(),
-                          const SizedBox(height: 24),
-                          
-                          // Social Media Section
-                          _buildSocialMediaSection(),
-                          const SizedBox(height: 24),
-                          
-                          // Scanning Section
-                          _buildScanningSection(),
-                          const SizedBox(height: 32),
-                          
-                          // Next Button
-                          _buildNextButton(),
-                          const SizedBox(height: 24),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                child: _buildFormContent(),
               ),
             ],
           ),
@@ -153,17 +99,14 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
     );
   }
 
-  Widget _buildCustomAppBar(BuildContext context) {
+  Widget _buildAppBar() {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           ),
           const SizedBox(width: 8),
           const Text(
@@ -180,7 +123,7 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
   }
 
   Widget _buildProgressIndicator() {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
@@ -196,9 +139,7 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
     );
   }
 
-  Widget _buildProgressStep(int step, String label, bool isCompleted) {
-    final isActive = step == 1; // Profile/Identity is active
-    
+  Widget _buildProgressStep(int step, String label, bool isActive) {
     return Expanded(
       child: Column(
         children: [
@@ -206,14 +147,14 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: isCompleted || isActive ? Colors.white : Colors.white.withOpacity(0.5),
+              color: isActive ? Colors.white : Colors.white.withOpacity(0.5),
               shape: BoxShape.circle,
             ),
             child: Center(
               child: Text(
                 '$step',
                 style: TextStyle(
-                  color: isCompleted || isActive ? const Color(0xFF1953EA) : Colors.grey,
+                  color: isActive ? _primaryColor : Colors.grey,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -243,457 +184,329 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
     );
   }
 
-  Widget _buildYourProfileSection() {
+  Widget _buildFormContent() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.all(24),
+      decoration: const BoxDecoration(
+        color: _backgroundColor,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      ),
+      child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildYourProfileSection(),
+              const SizedBox(height: 24),
+              _buildCurrentAddressSection(),
+              const SizedBox(height: 24),
+              _buildPlaceOfBirthSection(),
+              const SizedBox(height: 24),
+              _buildSocialMediaSection(),
+              const SizedBox(height: 24),
+              _buildScanningSection(),
+              const SizedBox(height: 32),
+              _buildNextButton(),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionCard({required String title, required List<Widget> children}) {
+    return Container(
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Your Profile',
-            style: TextStyle(
+          Text(
+            title,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3748),
+              color: _textPrimary,
             ),
           ),
           const SizedBox(height: 20),
-          
-          // ID Card Number
-          _buildFormField(
-            label: 'ID Card Number',
-            controller: _idCardController,
-            hint: 'ID Card Number',
-          ),
-          const SizedBox(height: 16),
-          
-          // Dateline
-          _buildDateField(
-            label: 'Dateline',
-            selectedDate: _selectedDateline,
-            hint: 'Dateline',
-            onDateSelected: (date) {
-              setState(() {
-                _selectedDateline = date;
-              });
-            },
-          ),
-          const SizedBox(height: 16),
-          
-          // Phone Number
-          _buildFormField(
-            label: 'Phone Number',
-            controller: _phoneController,
-            hint: 'Phone Number',
-            keyboardType: TextInputType.phone,
-          ),
-          const SizedBox(height: 16),
-          
-          // Last name and Name Row
-          Row(
-            children: [
-              Expanded(
-                child: _buildFormField(
-                  label: 'Last name',
-                  controller: _lastNameController,
-                  hint: 'Last name',
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildFormField(
-                  label: 'Name',
-                  controller: _nameController,
-                  hint: 'Name',
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          // Date of birth and Gender Row
-          Row(
-            children: [
-              Expanded(
-                child: _buildDateField(
-                  label: 'Date of birth',
-                  selectedDate: _selectedBirthDate,
-                  hint: 'Birth of date',
-                  onDateSelected: (date) {
-                    setState(() {
-                      _selectedBirthDate = date;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildDropdownField(
-                  label: 'Gender',
-                  value: _selectedGender,
-                  items: _genderOptions,
-                  hint: 'Gender',
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedGender = value!;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          // Family status and Education Row
-          Row(
-            children: [
-              Expanded(
-                child: _buildDropdownField(
-                  label: 'Family status',
-                  value: _selectedFamilyStatus,
-                  items: _familyStatusOptions,
-                  hint: 'Family status',
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedFamilyStatus = value!;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildDropdownField(
-                  label: 'Education',
-                  value: _selectedEducation,
-                  items: _educationOptions,
-                  hint: 'Education',
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedEducation = value!;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          // Personal property
-          _buildDropdownField(
-            label: 'Personal property',
-            value: _selectedPersonalProperty,
-            items: _personalPropertyOptions,
-            hint: 'Personal property',
-            onChanged: (value) {
-              setState(() {
-                _selectedPersonalProperty = value!;
-              });
-            },
-          ),
+          ...children,
         ],
       ),
+    );
+  }
+
+  Widget _buildYourProfileSection() {
+    return _buildSectionCard(
+      title: 'Your Profile',
+      children: [
+        _buildTextField(
+          label: 'ID Card Number',
+          controller: _idCardController,
+          hint: 'Enter ID Card Number',
+        ),
+        const SizedBox(height: 16),
+        _buildDateField(
+          label: 'Dateline',
+          selectedDate: _selectedDateline,
+          hint: 'Select dateline',
+          onDateSelected: (date) => setState(() => _selectedDateline = date),
+        ),
+        const SizedBox(height: 16),
+        _buildTextField(
+          label: 'Phone Number',
+          controller: _phoneController,
+          hint: 'Enter phone number',
+          keyboardType: TextInputType.phone,
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildTextField(
+                label: 'Last name',
+                controller: _lastNameController,
+                hint: 'Enter last name',
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildTextField(
+                label: 'Name',
+                controller: _nameController,
+                hint: 'Enter name',
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildDateField(
+                label: 'Date of birth',
+                selectedDate: _selectedBirthDate,
+                hint: 'Select birth date',
+                onDateSelected: (date) => setState(() => _selectedBirthDate = date),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildDropdown(
+                label: 'Gender',
+                value: _selectedGender,
+                items: _genderOptions,
+                onChanged: (value) => setState(() => _selectedGender = value!),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildDropdown(
+                label: 'Family status',
+                value: _selectedFamilyStatus,
+                items: _familyStatusOptions,
+                onChanged: (value) => setState(() => _selectedFamilyStatus = value!),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildDropdown(
+                label: 'Education',
+                value: _selectedEducation,
+                items: _educationOptions,
+                onChanged: (value) => setState(() => _selectedEducation = value!),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _buildDropdown(
+          label: 'Personal property',
+          value: _selectedPersonalProperty,
+          items: _personalPropertyOptions,
+          onChanged: (value) => setState(() => _selectedPersonalProperty = value!),
+        ),
+      ],
     );
   }
 
   Widget _buildCurrentAddressSection() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Current Address',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3748),
+    return _buildSectionCard(
+      title: 'Current Address',
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _buildTextField(
+                label: 'Home Number',
+                controller: _homeNumberController,
+                hint: 'Enter home number',
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          
-          // Home Number and Street Number Row
-          Row(
-            children: [
-              Expanded(
-                child: _buildFormField(
-                  label: 'Home Number',
-                  controller: _homeNumberController,
-                  hint: 'Home Number',
-                ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildTextField(
+                label: 'Street Number',
+                controller: _streetNumberController,
+                hint: 'Enter street number',
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildFormField(
-                  label: 'Street Number',
-                  controller: _streetNumberController,
-                  hint: 'Street Number',
-                ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _buildDropdown(
+          label: 'Province / City',
+          value: _selectedProvince,
+          items: _provinceOptions,
+          onChanged: (value) => setState(() => _selectedProvince = value!),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildDropdown(
+                label: 'Owner',
+                value: _selectedOwner,
+                items: _ownerOptions,
+                onChanged: (value) => setState(() => _selectedOwner = value!),
               ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          // Province / City
-          _buildDropdownField(
-            label: 'Province / City',
-            value: _selectedProvince,
-            items: _provinceOptions,
-            hint: 'Province / City',
-            onChanged: (value) {
-              setState(() {
-                _selectedProvince = value!;
-              });
-            },
-          ),
-          const SizedBox(height: 16),
-          
-          // Owner and Stay with Row
-          Row(
-            children: [
-              Expanded(
-                child: _buildDropdownField(
-                  label: 'Owner',
-                  value: _selectedOwner,
-                  items: _ownerOptions,
-                  hint: 'Owner',
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedOwner = value!;
-                    });
-                  },
-                ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildDropdown(
+                label: 'Stay with',
+                value: _selectedStayWith,
+                items: _stayWithOptions,
+                onChanged: (value) => setState(() => _selectedStayWith = value!),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildDropdownField(
-                  label: 'Stay with',
-                  value: _selectedStayWith,
-                  items: _stayWithOptions,
-                  hint: 'Stay with',
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedStayWith = value!;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          // Duration of stay
-          _buildDropdownField(
-            label: 'Duration of stay',
-            value: _selectedDurationOfStay,
-            items: _durationOptions,
-            hint: 'Duration of stay',
-            onChanged: (value) {
-              setState(() {
-                _selectedDurationOfStay = value!;
-              });
-            },
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _buildDropdown(
+          label: 'Duration of stay',
+          value: _selectedDurationOfStay,
+          items: _durationOptions,
+          onChanged: (value) => setState(() => _selectedDurationOfStay = value!),
+        ),
+      ],
     );
   }
 
   Widget _buildPlaceOfBirthSection() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Place of birth',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3748),
-            ),
-          ),
-          const SizedBox(height: 20),
-          
-          // Province / City
-          _buildDropdownField(
-            label: 'Province / City',
-            value: _selectedPlaceOfBirth,
-            items: _provinceOptions,
-            hint: 'Province / City',
-            onChanged: (value) {
-              setState(() {
-                _selectedPlaceOfBirth = value!;
-              });
-            },
-          ),
-        ],
-      ),
+    return _buildSectionCard(
+      title: 'Place of birth',
+      children: [
+        _buildDropdown(
+          label: 'Province / City',
+          value: _selectedPlaceOfBirth,
+          items: _provinceOptions,
+          onChanged: (value) => setState(() => _selectedPlaceOfBirth = value!),
+        ),
+      ],
     );
   }
 
   Widget _buildSocialMediaSection() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Social Media',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3748),
-            ),
-          ),
-          const SizedBox(height: 20),
-          
-          // Social Media Platform
-          _buildDropdownField(
-            label: 'Province / City',
-            value: _selectedSocialMedia,
-            items: _socialMediaOptions,
-            hint: 'Province / City',
-            onChanged: (value) {
-              setState(() {
-                _selectedSocialMedia = value!;
-              });
-            },
-          ),
-        ],
-      ),
+    return _buildSectionCard(
+      title: 'Social Media',
+      children: [
+        _buildDropdown(
+          label: 'Platform',
+          value: _selectedSocialMedia,
+          items: _socialMediaOptions,
+          onChanged: (value) => setState(() => _selectedSocialMedia = value!),
+        ),
+      ],
     );
   }
 
   Widget _buildScanningSection() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Scanning your identity card and selfie',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3748),
-            ),
+    return _buildSectionCard(
+      title: 'Scanning your identity card and selfie',
+      children: [
+        const Text(
+          'Click on the upload',
+          style: TextStyle(
+            fontSize: 14,
+            color: _primaryColor,
+            fontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 12),
-          const Text(
-            'Click on the upload',
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xFF1953EA),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 20),
-          
-          Row(
-            children: [
-              // Identity Upload
-              Expanded(
-                child: GestureDetector(
-                  onTap: _selectIdentityDocument,
-                  child: Container(
-                    height: 120,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xFF1953EA),
-                        style: BorderStyle.solid,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.credit_card,
-                          size: 32,
-                          color: Color(0xFF9CA3AF),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Identity',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF4A5568),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            Expanded(
+              child: _buildUploadBox(
+                icon: Icons.credit_card,
+                label: 'Identity',
+                onTap: _handleIdentityUpload,
               ),
-              
-              const SizedBox(width: 16),
-              
-              // Selfie Upload
-              Expanded(
-                child: GestureDetector(
-                  onTap: _selectSelfie,
-                  child: Container(
-                    height: 120,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xFF1953EA),
-                        style: BorderStyle.solid,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.image,
-                          size: 32,
-                          color: Color(0xFF9CA3AF),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Selfie',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF4A5568),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildUploadBox(
+                icon: Icons.image,
+                label: 'Selfie',
+                onTap: _handleSelfieUpload,
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUploadBox({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 120,
+        decoration: BoxDecoration(
+          border: Border.all(color: _primaryColor, width: 2),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 32, color: Colors.grey[400]),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                color: _textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildFormField({
+  Widget _buildTextField({
     required String label,
     required TextEditingController controller,
     required String hint,
@@ -707,7 +520,7 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF2D3748),
+            color: _textPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -716,28 +529,33 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
-              color: Color(0xFFA0AEC0),
-              fontSize: 14,
-            ),
+            hintStyle: const TextStyle(color: _textHint, fontSize: 14),
             filled: true,
             fillColor: Colors.grey[100],
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
             ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: _primaryColor, width: 2),
+            ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
+          autovalidateMode: AutovalidateMode.disabled,
         ),
       ],
     );
   }
 
-  Widget _buildDropdownField({
+  Widget _buildDropdown({
     required String label,
     required String value,
     required List<String> items,
-    required String hint,
     required ValueChanged<String?> onChanged,
   }) {
     return Column(
@@ -748,94 +566,16 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF2D3748),
+            color: _textPrimary,
           ),
         ),
         const SizedBox(height: 8),
         GestureDetector(
-          onTap: () {
-            showModalBottomSheet(
-              context: context,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              builder: (BuildContext context) {
-                return Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          label,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF2D3748),
-                          ),
-                        ),
-                      ),
-                      const Divider(height: 1, color: Color(0xFFE2E8F0)),
-                      SizedBox(
-                        height: 300,
-                        child: ListView.builder(
-                          itemCount: items.length,
-                          itemBuilder: (context, index) {
-                            final item = items[index];
-                            final isSelected = item == value;
-                            return GestureDetector(
-                              onTap: () {
-                                onChanged(item);
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                color: isSelected ? const Color(0xFFF3F4F6) : Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          item,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: const Color(0xFF2D3748),
-                                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      if (isSelected)
-                                        const Icon(
-                                          Icons.check,
-                                          color: Color(0xFF1953EA),
-                                          size: 20,
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
+          onTap: () => _showDropdownModal(label, items, value, onChanged),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color(0xFFCBD5E1),
-                width: 1.5,
-              ),
+              color: Colors.grey[100],
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -843,16 +583,10 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
                 Expanded(
                   child: Text(
                     value,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF2D3748),
-                    ),
+                    style: const TextStyle(fontSize: 14, color: _textPrimary),
                   ),
                 ),
-                const Icon(
-                  Icons.arrow_drop_down,
-                  color: Color(0xFF9CA3AF),
-                ),
+                const Icon(Icons.arrow_drop_down, color: Color(0xFF9CA3AF)),
               ],
             ),
           ),
@@ -875,7 +609,7 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF2D3748),
+            color: _textPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -895,16 +629,12 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
                         ? '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}'
                         : hint,
                     style: TextStyle(
-                      color: selectedDate != null ? const Color(0xFF2D3748) : const Color(0xFFA0AEC0),
+                      color: selectedDate != null ? _textPrimary : _textHint,
                       fontSize: 14,
                     ),
                   ),
                 ),
-                const Icon(
-                  Icons.calendar_today,
-                  size: 16,
-                  color: Color(0xFFA0AEC0),
-                ),
+                const Icon(Icons.calendar_today, size: 16, color: _textHint),
               ],
             ),
           ),
@@ -918,12 +648,10 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: _submitForm,
+        onPressed: _handleSubmit,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF1953EA),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          backgroundColor: _primaryColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           elevation: 0,
         ),
         child: const Text(
@@ -938,8 +666,82 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
     );
   }
 
-  void _selectDate(ValueChanged<DateTime> onDateSelected) async {
-    final DateTime? picked = await showDatePicker(
+  void _showDropdownModal(
+    String title,
+    List<String> items,
+    String currentValue,
+    ValueChanged<String?> onChanged,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: _textPrimary,
+                ),
+              ),
+            ),
+            const Divider(height: 1, color: _borderColor),
+            SizedBox(
+              height: 300,
+              child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  final isSelected = item == currentValue;
+                  return GestureDetector(
+                    onTap: () {
+                      onChanged(item);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      color: isSelected ? const Color(0xFFF3F4F6) : Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: _textPrimary,
+                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          if (isSelected)
+                            const Icon(Icons.check, color: _primaryColor, size: 20),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _selectDate(ValueChanged<DateTime> onDateSelected) async {
+    final picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
@@ -950,34 +752,41 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
     }
   }
 
-  void _selectIdentityDocument() {
+  void _handleIdentityUpload() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Identity document upload feature will be implemented here')),
+      const SnackBar(
+        content: Text('Identity document upload will be implemented'),
+        duration: Duration(seconds: 2),
+      ),
     );
   }
 
-  void _selectSelfie() {
+  void _handleSelfieUpload() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Selfie upload feature will be implemented here')),
+      const SnackBar(
+        content: Text('Selfie upload will be implemented'),
+        duration: Duration(seconds: 2),
+      ),
     );
   }
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile form submitted successfully!')),
-      );
-      widget.onFormCompleted?.call();
-      
-      // Navigate to next step (Occupation Form) - Step 2
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OccupationFormPage(
-            onFormCompleted: widget.onFormCompleted,
-          ),
+  void _handleSubmit() {
+    widget.onFormCompleted?.call();
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Profile form submitted successfully!'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+    
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OccupationFormPage(
+          onFormCompleted: widget.onFormCompleted,
         ),
-      );
-    }
+      ),
+    );
   }
 }

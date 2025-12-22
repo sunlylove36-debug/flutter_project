@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_fonts.dart';
 import 'constants/app_theme.dart';
@@ -13,6 +15,7 @@ import 'pages/referral_page.dart';
 import 'pages/service_page.dart';
 import 'pages/profile_page.dart';
 import 'dart:ui';
+
 void main() {
   runApp(const MyApp());
 }
@@ -24,11 +27,66 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => FormService(),
-      child: MaterialApp(
+      child: AdaptiveApp(
         title: 'Fintech App',
-        theme: AppTheme.lightTheme,
-        home: const HomePage(),
-        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.system,
+        materialLightTheme: AppTheme.lightTheme,
+        materialDarkTheme: ThemeData.dark(),
+        cupertinoLightTheme: const CupertinoThemeData(
+          brightness: Brightness.light,
+        ),
+        cupertinoDarkTheme: const CupertinoThemeData(
+          brightness: Brightness.dark,
+        ),
+        home: const MainNavigationPage(),
+      ),
+    );
+  }
+}
+
+class MainNavigationPage extends StatefulWidget {
+  const MainNavigationPage({super.key});
+
+  @override
+  State<MainNavigationPage> createState() => _MainNavigationPageState();
+}
+
+class _MainNavigationPageState extends State<MainNavigationPage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    const HomePage(),
+    const RequestLoanPage(),
+    const AccountPage(),
+    const ReferralPage(),
+    const ProfilePage(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return AdaptiveScaffold(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: AdaptiveBottomNavigationBar(
+        useNativeBottomBar: true, // Enable iOS 26 native glass effect
+        items: [
+          AdaptiveNavigationDestination(icon: 'house.fill', label: 'Home'),
+          AdaptiveNavigationDestination(
+            icon: 'money.dollar.circle.fill',
+            label: 'Loans',
+          ),
+          AdaptiveNavigationDestination(
+            icon: 'chart.bar.fill',
+            label: 'Activity',
+          ),
+          AdaptiveNavigationDestination(icon: 'gift.fill', label: 'Rewards'),
+          AdaptiveNavigationDestination(icon: 'person.fill', label: 'Profile'),
+        ],
+        selectedIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
@@ -72,184 +130,167 @@ class _HomePageState extends State<HomePage> {
     _pageController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryDarkBlue,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header
-                  _buildHeader(),
-                  const SizedBox(height: 20),
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // iOS Native Navigation Bar
+                _buildIOSNavBar(),
+                const SizedBox(height: 20),
 
-                  // Greeting
-                  Text(
-                    'Good morning!',
-                    style: AppFonts.greeting.copyWith(
-                      color: AppColors.textLight,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                // Greeting
+                Text(
+                  'Good morning!',
+                  style: AppFonts.greeting.copyWith(color: AppColors.textLight),
+                ),
+                const SizedBox(height: 20),
 
-                  // Service Grid
-                  _buildServiceGrid(),
-                  const SizedBox(height: 20),
+                // Service Grid
+                _buildServiceGrid(),
+                const SizedBox(height: 20),
 
-                  // Slide Banner
-                  _buildSlideBanner(),
-                  const SizedBox(height: 20),      
+                // Slide Banner
+                _buildSlideBanner(),
+                const SizedBox(height: 20),
 
-                  // Referrals Section
-                  _buildReferralsSection(),
-                  const SizedBox(height: 20),
-                ],
-              ),
+                // Referrals Section
+                _buildReferralsSection(),
+                const SizedBox(height: 20),
+              ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-  margin: const EdgeInsets.all(16),
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(30),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.2),
-        blurRadius: 20,
-        offset: const Offset(0, 10),
-      ),
-    ],
-  ),
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(30),
-    child: BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.2),
-            width: 1.5,
-          ),
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble_rounded),
-              label: 'Chat',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet_rounded),
-              label: 'Loan',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_rounded),
-              label: 'Profile',
-            ),
-          ],
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white.withOpacity(0.5),
-          selectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 11,
-          ),
-        ),
-      ),
-    ),
-  ),
-),
     );
   }
 
-  Widget _buildHeader() {
+  // iOS Native Navigation Bar
+  Widget _buildIOSNavBar() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Menu icon
-          GestureDetector(
-            onTap: () {
+          // Menu Button - iOS Style
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const ProfilePage()),
               );
             },
             child: const Icon(
-              Icons.menu,
+              CupertinoIcons.line_horizontal_3,
               color: Colors.white,
-              size: 24,
+              size: 26,
             ),
           ),
-          
-          // Full Logo (no additional text needed)
-          Container(
-            height: 40,
-            constraints: const BoxConstraints(maxWidth: 200),
-            child: Image.asset(
-              'assets/images/logo.png',
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'LUYLEUN',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                );
-              },
+
+          // Logo
+          Expanded(
+            child: Center(
+              child: Container(
+                height: 36,
+                constraints: const BoxConstraints(maxWidth: 180),
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.25),
+                          width: 1,
+                        ),
+                      ),
+                      child: const Text(
+                        'LUYLEUN',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
-          
-          // Action icons
+
+          // Action Buttons
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.notifications_outlined,
-                color: Colors.white,
-                size: 22,
+              // Notification Button with Badge
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    const Icon(
+                      CupertinoIcons.bell_fill,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                    Positioned(
+                      right: -4,
+                      top: -4,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: CupertinoColors.systemRed,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 1.5),
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 18,
+                          minHeight: 18,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '3',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(width: 4),
-              Container(
-                width: 1,
-                height: 20,
-                color: Colors.white.withOpacity(0.5),
-              ),
-              const SizedBox(width: 4),
-              const Icon(
-                Icons.chat,
-                color: Colors.white,
-                size: 20,
+              // Chat Button
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                child: const Icon(
+                  CupertinoIcons.chat_bubble_fill,
+                  color: Colors.white,
+                  size: 24,
+                ),
               ),
             ],
           ),
@@ -258,40 +299,35 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- 
-
   Widget _buildServiceGrid() {
     final services = [
       {
-        'icon': 'assets/images/account.png', // Add your custom account icon
+        'icon': 'assets/images/account.png',
         'title': 'Account',
-        'fallbackIcon':
-            Icons.account_balance_wallet, // Fallback if image not found
+        'fallbackIcon': Icons.account_balance_wallet,
       },
       {
-        'icon': 'assets/images/loan.png', // Add your custom loan icon
+        'icon': 'assets/images/loan.png',
         'title': 'Digital Loan',
         'fallbackIcon': Icons.attach_money,
       },
       {
-        'icon':
-            'assets/images/calculator.png', // Add your custom repayment icon
+        'icon': 'assets/images/calculator.png',
         'title': 'Financial Tools',
         'fallbackIcon': Icons.calculate,
       },
       {
-        'icon':
-            'assets/images/calculator.png', // Add your custom calculator icon
+        'icon': 'assets/images/calculator.png',
         'title': 'Education',
         'fallbackIcon': Icons.school,
       },
       {
-        'icon': 'assets/images/inviteFri.png', // Add your custom referral icon
+        'icon': 'assets/images/inviteFri.png',
         'title': 'Job Listing',
         'fallbackIcon': Icons.work,
       },
       {
-        'icon': 'assets/images/service.png', // Add your custom service icon
+        'icon': 'assets/images/service.png',
         'title': 'Service',
         'fallbackIcon': Icons.apps,
       },
@@ -302,10 +338,7 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.2),
-          width: 1.5,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -332,10 +365,12 @@ class _HomePageState extends State<HomePage> {
                 case 'Account':
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AccountPage()),
+                    MaterialPageRoute(
+                      builder: (context) => const AccountPage(),
+                    ),
                   );
                   break;
-                case 'Request Loan':
+                case 'Digital Loan':
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -343,15 +378,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                   break;
-                case 'Repayment':
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RepaymentPage(),
-                    ),
-                  );
-                  break;
-                case 'Loan\nCalculator':
+                case 'Financial Tools':
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -359,16 +386,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                   break;
-                case 'Referral':
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ReferralPage()),
-                  );
-                  break;
                 case 'Service':
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ServicePage()),
+                    MaterialPageRoute(
+                      builder: (context) => const ServicePage(),
+                    ),
                   );
                   break;
               }
@@ -410,16 +433,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Helper method to build service icons
   Widget _buildServiceIcon(String imagePath, IconData fallbackIcon) {
-    // Load image for Account, Digital Loan, and Financial Tools services
-    if (fallbackIcon == Icons.account_balance_wallet || fallbackIcon == Icons.attach_money || fallbackIcon == Icons.trending_up) {
-      // Use calculator.png specifically for Financial Tools
+    if (fallbackIcon == Icons.account_balance_wallet ||
+        fallbackIcon == Icons.attach_money ||
+        fallbackIcon == Icons.trending_up) {
       String assetPath = imagePath;
       if (fallbackIcon == Icons.trending_up) {
         assetPath = 'assets/images/calculator.png';
       }
-      
+
       return SizedBox(
         width: 30,
         height: 30,
@@ -427,100 +449,101 @@ class _HomePageState extends State<HomePage> {
           assetPath,
           fit: BoxFit.contain,
           errorBuilder: (context, error, stackTrace) {
-            // Fallback icons
             if (fallbackIcon == Icons.account_balance_wallet) {
-              return Icon(Icons.payment, color: AppColors.primaryBlue, size: 30);
+              return Icon(
+                Icons.payment,
+                color: AppColors.primaryBlue,
+                size: 30,
+              );
             } else if (fallbackIcon == Icons.attach_money) {
-              return Icon(Icons.attach_money, color: AppColors.primaryBlue, size: 30);
+              return Icon(
+                Icons.attach_money,
+                color: AppColors.primaryBlue,
+                size: 30,
+              );
             } else {
-              return Icon(Icons.calculate, color: AppColors.primaryBlue, size: 30);
+              return Icon(
+                Icons.calculate,
+                color: AppColors.primaryBlue,
+                size: 30,
+              );
             }
           },
         ),
       );
     }
-    
-    // Map service titles to custom icon displays for other services
+
     final iconMap = {
       Icons.school: Icons.school,
       Icons.work: Icons.business_center,
       Icons.apps: Icons.miscellaneous_services,
     };
-    
+
     final displayIcon = iconMap[fallbackIcon] ?? fallbackIcon;
     return Icon(displayIcon, color: AppColors.primaryBlue, size: 30);
   }
 
   Widget _buildSlideBanner() {
-  final banners = [
-    {
-      'image': 'assets/images/banner.jpg',
-      'color': AppColors.primaryBlue,
-    },
-    {
-      'image': 'assets/images/banner1.jpg',
-      'color': AppColors.primaryDarkBlue,
-    },
-    {
-      'image': 'assets/images/banner2.jpg',
-      'color': const Color(0xFF4A90E2),
-    },
-  ];
-
-  return SizedBox(
-    height: 150,
-    child: PageView.builder(
-      controller: _pageController,
-      itemCount: banners.length,
-      onPageChanged: (index) {
-        setState(() {
-          _currentPage = index;
-        });
+    final banners = [
+      {'image': 'assets/images/banner.jpg', 'color': AppColors.primaryBlue},
+      {
+        'image': 'assets/images/banner1.jpg',
+        'color': AppColors.primaryDarkBlue,
       },
-      itemBuilder: (context, index) {
-        final banner = banners[index];
-        
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.asset(
-              banner['image'] as String,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                // Fallback to gradient if image not found
-                return Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        banner['color'] as Color,
-                        (banner['color'] as Color).withOpacity(0.8),
-                      ],
-                    ),
-                  ),
-                );
-              },
+      {'image': 'assets/images/banner2.jpg', 'color': const Color(0xFF4A90E2)},
+    ];
+
+    return SizedBox(
+      height: 150,
+      child: PageView.builder(
+        controller: _pageController,
+        itemCount: banners.length,
+        onPageChanged: (index) {
+          setState(() {
+            _currentPage = index;
+          });
+        },
+        itemBuilder: (context, index) {
+          final banner = banners[index];
+
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-          ),
-        );
-      },
-    ),
-  );
-}
-
-  
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.asset(
+                banner['image'] as String,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          banner['color'] as Color,
+                          (banner['color'] as Color).withOpacity(0.8),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   Widget _buildReferralsSection() {
     return Column(
