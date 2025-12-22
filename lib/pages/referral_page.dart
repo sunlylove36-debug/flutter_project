@@ -34,6 +34,7 @@ class _ReferralPageState extends State<ReferralPage> {
           gradient: AppColors.primaryGradient,
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               // Custom App Bar

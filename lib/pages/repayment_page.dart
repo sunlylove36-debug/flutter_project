@@ -33,6 +33,7 @@ class _RepaymentPageState extends State<RepaymentPage> {
           gradient: AppColors.primaryGradient,
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               // Custom App Bar

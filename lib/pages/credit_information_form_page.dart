@@ -73,6 +73,7 @@ class _CreditInformationFormPageState extends State<CreditInformationFormPage> {
           ),
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               // Custom App Bar with Progress

@@ -63,6 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildHeader(BuildContext context) {
     return SafeArea(
+      bottom: false,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Row(

@@ -1,3 +1,6 @@
 {
-    "cmake.sourceDirectory": "/Users/sunly/flutter_project/linux"
+    "cmake.sourceDirectory": "/Users/sunly/flutter_project/linux",
+    "cSpell.words": [
+        "dollarsign"
+    ]
 }

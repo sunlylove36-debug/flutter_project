@@ -14,6 +14,7 @@ class ProfileDetailPage extends StatelessWidget {
         child: Column(
           children: [
             SafeArea(
+              bottom: false,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Row(

@@ -52,6 +52,7 @@ class _RequestLoanPageState extends State<RequestLoanPage> {
                 gradient: AppColors.primaryGradient,
             ),
             child: SafeArea(
+              bottom: false,
               child: Column(
                 children: [
                   // Custom App Bar

@@ -37,6 +37,9 @@ dependencies:
   provider: ^6.1.1
   image_picker: ^1.2.1
   flutter_launcher_icons: ^0.14.4
+  adaptive_platform_ui: ^0.1.100
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:

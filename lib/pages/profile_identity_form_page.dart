@@ -85,6 +85,7 @@ class _ProfileIdentityFormPageState extends State<ProfileIdentityFormPage> {
           ),
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               _buildAppBar(),

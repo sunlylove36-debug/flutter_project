@@ -51,6 +51,7 @@ class _LoanCalculatorPageState extends State<LoanCalculatorPage> {
           gradient: AppColors.primaryGradient,
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               // Custom App Bar

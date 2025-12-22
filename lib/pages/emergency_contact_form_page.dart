@@ -80,6 +80,7 @@ class _EmergencyContactFormPageState extends State<EmergencyContactFormPage> {
           ),
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               // Custom App Bar with Progress

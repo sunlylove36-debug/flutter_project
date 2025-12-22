@@ -108,6 +108,7 @@ class _OccupationFormPageState extends State<OccupationFormPage> {
           ),
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               // Custom App Bar with Progress

@@ -13,6 +13,7 @@ class AccountPage extends StatelessWidget {
           gradient: AppColors.primaryGradient,
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               // Custom App Bar

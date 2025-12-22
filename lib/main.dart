@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'constants/app_colors.dart';
@@ -9,12 +10,11 @@ import 'constants/app_theme.dart';
 import 'services/form_service.dart';
 import 'pages/account_page.dart';
 import 'pages/request_loan_page.dart';
-import 'pages/repayment_page.dart';
+// import 'pages/repayment_page.dart';
 import 'pages/loan_calculator_page.dart';
 import 'pages/referral_page.dart';
 import 'pages/service_page.dart';
 import 'pages/profile_page.dart';
-import 'dart:ui';
 
 void main() {
   runApp(const MyApp());
@@ -38,6 +38,12 @@ class MyApp extends StatelessWidget {
         cupertinoDarkTheme: const CupertinoThemeData(
           brightness: Brightness.dark,
         ),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('en', 'US'), Locale('km', 'KH')],
         home: const MainNavigationPage(),
       ),
     );
@@ -67,11 +73,11 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     return AdaptiveScaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: AdaptiveBottomNavigationBar(
-        useNativeBottomBar: true, // Enable iOS 26 native glass effect
+        useNativeBottomBar: true,
         items: [
           AdaptiveNavigationDestination(icon: 'house.fill', label: 'Home'),
           AdaptiveNavigationDestination(
-            icon: 'money.dollar.circle.fill',
+            icon: 'dollarsign.circle.fill',
             label: 'Loans',
           ),
           AdaptiveNavigationDestination(
@@ -138,6 +144,7 @@ class _HomePageState extends State<HomePage> {
       height: double.infinity,
       decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
       child: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
